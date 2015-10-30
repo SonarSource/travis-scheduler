@@ -1,0 +1,16 @@
+version: 1.0.{build}
+
+install:
+  - set MAVEN_VERSION=3.2.5
+  - choco install maven -version %MAVEN_VERSION%
+  - set PATH=%PATH%;C:\bin\apache-maven-%MAVEN_VERSION%\bin
+  - set JAVA_HOME=C:\Program Files (x86)\Java\jdk1.8.0
+
+environment:
+  GITHUB_TOKEN:
+    secure: LILHLHOw9/K+6tCSUm3w8Yqv38LcAXaT/hXsn4BCBVqXUAzWu3M07qPeitumudWT
+
+build_script:
+  - cmd: mvn clean install && java -jar target\travis-scheduler-1.0-SNAPSHOT.jar
+
+test: off
