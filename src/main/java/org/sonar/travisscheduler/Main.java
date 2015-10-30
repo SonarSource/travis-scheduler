@@ -55,7 +55,7 @@ public class Main {
       if (!client.startBuildOfMasterBranch(slug)) {
         System.out.println("  - FAILED!");
       }
-      Thread.sleep(1000);
+      Thread.sleep(10000);
     }
   }
 
