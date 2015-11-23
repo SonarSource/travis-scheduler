@@ -42,7 +42,10 @@ public class Main {
       throw new IllegalArgumentException("Mandatory environment variable GITHUB_TOKEN is missing!");
     }
 
-    TravisClient client = new TravisClient("https://api.travis-ci.org", githubToken);
+    TravisClient client = new TravisClient("https://api.travis-ci.com", githubToken);
+    scheduleBuilds(client, "SonarSource");
+
+    client = new TravisClient("https://api.travis-ci.org", githubToken);
     scheduleBuilds(client, "SonarSource");
     scheduleBuilds(client, "SonarCommunity");
     System.out.println("Done");
