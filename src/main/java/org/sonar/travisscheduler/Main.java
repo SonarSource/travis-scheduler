@@ -159,6 +159,7 @@ public class Main {
       Request.Builder request = new Request.Builder();
       request.url(url);
       request.addHeader("Accept", "application/json");
+      request.addHeader("User-Agent", "SonarSource");
       if (accessToken != null) {
         request.addHeader("Authorization", "token " + accessToken);
       }
