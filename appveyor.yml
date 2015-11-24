@@ -11,6 +11,6 @@ environment:
     secure: LILHLHOw9/K+6tCSUm3w8Yqv38LcAXaT/hXsn4BCBVqXUAzWu3M07qPeitumudWT
 
 build_script:
-  - cmd: mvn clean install && java -jar target\travis-scheduler-1.0-SNAPSHOT.jar
+  - cmd: mvn -B clean install && java -jar target\travis-scheduler-1.0-SNAPSHOT.jar
 
 test: off
