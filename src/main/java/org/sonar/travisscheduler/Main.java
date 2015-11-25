@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
 
@@ -76,6 +77,10 @@ public class Main {
     public TravisClient(String endpoint, String githubToken) {
       this.endpoint = endpoint;
       this.githubToken = githubToken;
+
+      this.client.setConnectTimeout(90, TimeUnit.SECONDS);
+      this.client.setReadTimeout(90, TimeUnit.SECONDS);
+      this.client.setWriteTimeout(90, TimeUnit.SECONDS);
     }
 
     public void ensureAuthenticated() {
