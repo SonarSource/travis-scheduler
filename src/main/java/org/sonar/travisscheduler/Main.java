@@ -28,7 +28,6 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,7 +47,7 @@ public class Main {
 
     client = new TravisClient("https://api.travis-ci.org", githubToken);
     scheduleBuilds(client, "SonarSource");
-    scheduleBuilds(client, "SonarCommunity");
+    scheduleBuilds(client, "SonarQubeCommunity");
     System.out.println("Done");
   }
 
@@ -102,19 +101,19 @@ public class Main {
     public List<String> activeReposSlug(String ownerName) {
       ensureAuthenticated();
       Request request = newRequestBuilder(
-        newHttpBuilder("/repos")
-          .addQueryParameter("owner_name", ownerName)
-          .addQueryParameter("active", "true")
+        newHttpBuilder("/v3/owner/")
+          .addPathSegment(ownerName)
+          .addQueryParameter("include", "user.repositories,organization.repositories,repository.active")
           .build())
         .get()
         .build();
       String response = executeCall(request);
 
       List<String> result = new ArrayList<String>();
-      JsonArray repos = parser.parse(response).getAsJsonArray();
+      JsonArray repos = parser.parse(response).getAsJsonObject().getAsJsonArray("repositories");
       for (int i = 0; i < repos.size(); i++) {
         JsonObject repo = repos.get(i).getAsJsonObject();
-        if (!repo.get("last_build_id").isJsonNull()) {
+        if (repo.get("active").getAsBoolean()) {
           result.add(repo.get("slug").getAsString());
         }
       }
