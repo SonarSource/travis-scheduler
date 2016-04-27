@@ -8,7 +8,7 @@ install:
 
 environment:
   GITHUB_TOKEN:
-    secure: LILHLHOw9/K+6tCSUm3w8Yqv38LcAXaT/hXsn4BCBVqXUAzWu3M07qPeitumudWT
+    secure: od8N6CFzNBRFQo42Phudd+d8uJFT7Ea/OAmqxgjmn9aIIDDUa2Mdnmj39pKZhkky
 
 build_script:
   - cmd: mvn -B clean install && java -jar target\travis-scheduler-1.0-SNAPSHOT.jar
