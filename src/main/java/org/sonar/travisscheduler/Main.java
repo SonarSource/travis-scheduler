@@ -48,17 +48,30 @@ public class Main {
     client = new TravisClient("https://api.travis-ci.org", githubToken);
     scheduleBuilds(client, "SonarSource");
     scheduleBuilds(client, "SonarQubeCommunity");
+
     System.out.println("Done");
   }
 
   private static void scheduleBuilds(TravisClient client, String ownerName) throws Exception {
+    double total = 0;
+    double failures = 0;
+
     for (String slug : client.activeReposSlug(ownerName)) {
+      total++;
+
       System.out.println("Launching the build of: " + slug);
       client.deleteMasterBranchCache(slug);
-      if (!client.startBuildOfMasterBranch(slug)) {
-        System.out.println("  - FAILED!");
+      try {
+        client.startBuildOfMasterBranch(slug);
+      } catch (IllegalStateException e) {
+        failures++;
+        System.out.println("  - FAILED! " + e.getMessage());
       }
-      Thread.sleep(10000);
+      Thread.sleep(15000);
+    }
+
+    if (failures / total >= 0.3) {
+      throw new IllegalStateException("Too many jobs relaunches failed for: " + ownerName);
     }
   }
 
@@ -132,7 +145,7 @@ public class Main {
       executeCall(request);
     }
 
-    public boolean startBuildOfMasterBranch(String slug) {
+    public void startBuildOfMasterBranch(String slug) {
       ensureAuthenticated();
 
       JsonObject jsonRequestParams = new JsonObject();
@@ -148,7 +161,9 @@ public class Main {
         .build();
       String response = executeCall(request, 202, 403);
 
-      return "pending".equals(parser.parse(response).getAsJsonObject().get("@type").getAsString());
+      if (!"pending".equals(parser.parse(response).getAsJsonObject().get("@type").getAsString())) {
+        throw new IllegalStateException("Unexpected response: " + response);
+      }
     }
 
     private HttpUrl.Builder newHttpBuilder(String path) {
