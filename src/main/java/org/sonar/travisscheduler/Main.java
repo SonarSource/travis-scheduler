@@ -43,10 +43,10 @@ public class Main {
     }
 
     TravisClient client = new TravisClient("https://api.travis-ci.com", githubToken);
-    scheduleBuilds(client, "SonarSource");
+    //scheduleBuilds(client, "SonarSource");
 
     client = new TravisClient("https://api.travis-ci.org", githubToken);
-    scheduleBuilds(client, "SonarSource");
+    //scheduleBuilds(client, "SonarSource");
     //we do not schedule builds on SonarQubeCommunity anymore
     //scheduleBuilds(client, "SonarQubeCommunity");
 
