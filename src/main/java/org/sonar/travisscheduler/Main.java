@@ -47,7 +47,8 @@ public class Main {
 
     client = new TravisClient("https://api.travis-ci.org", githubToken);
     scheduleBuilds(client, "SonarSource");
-    scheduleBuilds(client, "SonarQubeCommunity");
+    //we do not schedule builds on SonarQubeCommunity anymore
+    //scheduleBuilds(client, "SonarQubeCommunity");
 
     System.out.println("Done");
   }
